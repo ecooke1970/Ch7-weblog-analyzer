@@ -74,15 +74,16 @@ public class LogAnalyzer
     }
     
     /**
-     * Returns the most active hour from the data.     * 
+     * Returns the most active hour from the data.     
+     * If there is more than one hour with the same amount it will return the first found
      */
     public int busiestHour() {
         int biggest = 0;
         int busiest = 0;
-        for(int i = 0;i < hourCounts.length;i++) {
-            if(hourCounts[i] > biggest) {
-                biggest = hourCounts[i];
-                busiest = i;
+        for(int hour = 0;hour < hourCounts.length;hour++) {
+            if(hourCounts[hour] > biggest) {
+                biggest = hourCounts[hour];
+                busiest = hour;
             }            
         }
         return busiest;
@@ -90,6 +91,7 @@ public class LogAnalyzer
     
     /**
      * Return the least active hour from the data
+     * Will return the first found if multiple hours are the lowest
      */
     public int quietestHour() {
         int leastVisits = hourCounts[0];
@@ -102,4 +104,26 @@ public class LogAnalyzer
         }
         return quietest;
     }
+    
+    /**
+     * Returns the busiest 2 hour period from the data
+     */
+    public int busiestTwoHour() {
+        int busiest = 0;
+        int biggest = 0;
+        for(int i = 0;i < hourCounts.length;i++) {
+            if(i == hourCounts.length - 1) {
+                if(hourCounts[i] + hourCounts[0] > biggest) {
+                    biggest = hourCounts[i] + hourCounts[0];
+                    busiest = i;
+                }
+            }                    
+            else if(hourCounts[i] + hourCounts[i + 1] > biggest) {
+                    biggest = hourCounts[i] + hourCounts[i + 1];
+                    busiest = i;
+            }
+        }
+        return busiest;
+    }
+
 }
