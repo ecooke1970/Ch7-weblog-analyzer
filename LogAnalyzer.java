@@ -72,4 +72,34 @@ public class LogAnalyzer
         }
         return total;
     }
+    
+    /**
+     * Returns the most active hour from the data.     * 
+     */
+    public int busiestHour() {
+        int biggest = 0;
+        int busiest = 0;
+        for(int i = 0;i < hourCounts.length;i++) {
+            if(hourCounts[i] > biggest) {
+                biggest = hourCounts[i];
+                busiest = i;
+            }            
+        }
+        return busiest;
+    }
+    
+    /**
+     * Return the least active hour from the data
+     */
+    public int quietestHour() {
+        int leastVisits = hourCounts[0];
+        int quietest = 0;
+        for(int i = 1;i < hourCounts.length;i++) {
+            if(hourCounts[i] < leastVisits) {
+                leastVisits = hourCounts[i];
+                quietest = i;
+            }
+        }
+        return quietest;
+    }
 }
