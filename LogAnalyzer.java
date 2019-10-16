@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 /**
  * Read web server data and analyse hourly access patterns.
  * 
@@ -17,6 +19,8 @@ public class LogAnalyzer
     private int[] dayCounts;
     //Where to calculate the monthly access counts.
     private int[] monthCounts;
+    //Where to calculate monthly access by year.
+    private HashMap<Integer, int[]> yearMonth;
 
     /**
      * Create an object to analyze hourly web accesses.
@@ -28,11 +32,13 @@ public class LogAnalyzer
         // hourly access counts.
         hourCounts = new int[24];
         //daily access counts
-        dayCounts = new int[29];
+        dayCounts = new int[32];
         //monthly access counts
         monthCounts = new int[13];
         // Create the reader to obtain the data.
         reader = new LogfileReader(filename);
+        
+        yearMonth = new HashMap<Integer,int[]>();
     }
 
     /**
@@ -43,7 +49,7 @@ public class LogAnalyzer
     {
         analyzeHourlyData();
         analyzeDailyData();
-        //analyzeMonthlyData();
+        analyzeMonthlyData();
     }
     
     /**
@@ -223,7 +229,56 @@ public class LogAnalyzer
     {
         System.out.println("\nMonth: Count");
         for(int month = 1;month < monthCounts.length;month++) {
-            System.out.println(month + ": " + monthCounts[month]);
+            System.out.println(month + ":     " + monthCounts[month]);
+        }
+    }
+    
+        /**
+     * Returns the quietest month.  If there is more than one month with same value,
+     *  returns first found.
+     */
+    public int quietestMonth()
+    {
+        int leastVisits = monthCounts[1];
+        int quietest = 0;
+        for(int month = 1;month < monthCounts.length;month++) {
+            if(monthCounts[month] < leastVisits) {
+                leastVisits = monthCounts[month];
+                quietest = month;
+            }
+        }
+        return quietest;
+    }
+    
+    /**
+     * Returns the busiest month. If there is more than one month with same value,
+     * returns first found.
+     */
+    public int busiestMonth()
+    {
+        int mostVisits = 0;
+        int busiest = 0;
+        for(int month = 1;month < monthCounts.length;month++) {
+            if(monthCounts[month] > mostVisits) {
+                mostVisits = monthCounts[month];
+                busiest = month;
+            }
+        }
+        return busiest;
+    }
+    
+    /**
+     * 
+     */
+    public void analyzeYearMonth()
+    {
+        reader.reset();
+        int[] workingMonth = new int[13];
+        while(reader.hasNext()) {
+            LogEntry entry = reader.next();
+            Integer year = entry.getYear();
+            int month = entry.getMonth();
+            yearMonth.put(year,workingMonth[month]++);
         }
     }
 }

@@ -4,6 +4,9 @@ import java.util.*;
 /**
  * A class for creating log files of random data.
  * 
+ * @author Erik Cooke
+ * @version 2019.10.16
+ * 
  * @author David J. Barnes and Michael Kölling
  * @version    2016.02.29
  */
@@ -57,10 +60,19 @@ public class LogfileCreator
      */
     public LogEntry createEntry()
     {
-        int year = 2016;
+        int year = 2015 + rand.nextInt(5);
         int month = 1 + rand.nextInt(12);
-        // Avoid the complexities of days-per-month.
-        int day = 1 + rand.nextInt(28);
+        // Set day of month based on month
+        int day = 0;
+        if(month == 2) {
+            day = 1 + rand.nextInt(28);
+        }
+        else if(month == 4 || month == 6 || month == 9 || month == 11) {
+            day = 1 + rand.nextInt(30);
+        }
+        else {
+            day = 1 + rand.nextInt(31);
+        }
         int hour = rand.nextInt(24);
         int minute = rand.nextInt(60);
         return new LogEntry(year, month, day, hour, minute);
