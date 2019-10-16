@@ -13,6 +13,10 @@ public class LogAnalyzer
     private int[] hourCounts;
     // Use a LogfileReader to access the data.
     private LogfileReader reader;
+    //Where to calculate the daily access counts.
+    private int[] dayCounts;
+    //Where to calculate the monthly access counts.
+    private int[] monthCounts;
 
     /**
      * Create an object to analyze hourly web accesses.
@@ -21,17 +25,33 @@ public class LogAnalyzer
     public LogAnalyzer(String filename)
     { 
         // Create the array object to hold the hourly
-        // access counts.
+        // hourly access counts.
         hourCounts = new int[24];
+        //daily access counts
+        dayCounts = new int[29];
+        //monthly access counts
+        monthCounts = new int[13];
         // Create the reader to obtain the data.
         reader = new LogfileReader(filename);
     }
 
     /**
+     * Run all of the analyze methods.
+     * analyzeHourlyData, analyzeDailyData, analyzeMonthyData
+     */
+    public void analyzeAll()
+    {
+        analyzeHourlyData();
+        analyzeDailyData();
+        //analyzeMonthlyData();
+    }
+    
+    /**
      * Analyze the hourly access data from the log file.
      */
     public void analyzeHourlyData()
     {
+        reader.reset();
         while(reader.hasNext()) {
             LogEntry entry = reader.next();
             int hour = entry.getHour();
@@ -46,7 +66,7 @@ public class LogAnalyzer
      */
     public void printHourlyCounts()
     {
-        System.out.println("Hr: Count");
+        System.out.println("\nHr: Count");
         for(int hour = 0; hour < hourCounts.length; hour++) {
             System.out.println(hour + ": " + hourCounts[hour]);
         }
@@ -125,5 +145,85 @@ public class LogAnalyzer
         }
         return busiest;
     }
+    
+    /**
+     * Analyze the daily access data from the log file.
+     */
+    public void analyzeDailyData()
+    {
+        reader.reset();
+        while(reader.hasNext()) {
+            LogEntry entry = reader.next();
+            int day = entry.getDay();
+            dayCounts[day]++;
+        }
+    }
+    
+    /**
+     * Print daily counts
+     */
+    public void printDailyCounts()
+    {
+        System.out.println("\nDay: Count");
+        for(int day = 1;day < dayCounts.length;day++) {
+            System.out.println(day + ": " + dayCounts[day]);
+        }
+    }
+    /**
+     * Returns the quietest day.  If there are more than one day with same value,
+     *  returns first found.
+     */
+    public int quietestDay()
+    {
+        int leastVisits = dayCounts[1];
+        int quietest = 0;
+        for(int day = 1;day < dayCounts.length;day++) {
+            if(dayCounts[day] < leastVisits) {
+                leastVisits = dayCounts[day];
+                quietest = day;
+            }
+        }
+        return quietest;
+    }
+    
+    /**
+     * Returns the busiest day. If there are more than one day with same value,
+     * returns first found.
+     */
+    public int busiestDay()
+    {
+        int mostVisits = 0;
+        int busiest = 0;
+        for(int day = 1;day < dayCounts.length;day++) {
+            if(dayCounts[day] > mostVisits) {
+                mostVisits = dayCounts[day];
+                busiest = day;
+            }
+        }
+        return busiest;
+    }
 
+    /**
+     * Analyze the monthly access data from the log file.
+     */
+    public void analyzeMonthlyData()
+    {
+        reader.reset();
+        while(reader.hasNext()) {
+            LogEntry entry = reader.next();
+            int month = entry.getMonth();
+            monthCounts[month]++;
+        }
+    }
+    
+    /**
+     * Print monthly counts
+     */
+    public void printMonthlyCounts()
+    {
+        System.out.println("\nMonth: Count");
+        for(int month = 1;month < monthCounts.length;month++) {
+            System.out.println(month + ": " + monthCounts[month]);
+        }
+    }
 }
