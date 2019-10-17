@@ -75,7 +75,18 @@ public class LogfileCreator
         }
         int hour = rand.nextInt(24);
         int minute = rand.nextInt(60);
-        return new LogEntry(year, month, day, hour, minute);
+        int statusCode = 0;
+        int percent = rand.nextInt(101);
+        if(percent < 95) {
+            statusCode = 200;
+        }
+        else if(percent > 97) {
+            statusCode = 403;
+        }
+        else {
+            statusCode = 404;
+        }
+        return new LogEntry(year, month, day, hour, minute, statusCode);
     }
 
 }
