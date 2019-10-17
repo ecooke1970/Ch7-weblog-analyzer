@@ -52,13 +52,15 @@ public class LogAnalyzer
     /**
      * Run all of the analyze methods.
      * analyzeHourlyData, analyzeDailyData, analyzeMonthyData, analyzeYearMonth
+     * @param year the year to use for analyzeStatusCodes
      */
-    public void analyzeAll()
+    public void analyzeAll(int year)
     {
         analyzeHourlyData();
         analyzeDailyData();
         analyzeMonthlyData();
         analyzeYearMonth();
+        analyzeStatusCodes(year);
     }
     
     /**
