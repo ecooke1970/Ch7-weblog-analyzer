@@ -310,7 +310,7 @@ public class LogAnalyzer
      */
     public void averageAccessesPerMonth()
     {
-        System.out.println("\nAverage Accessess Per Month");
+        System.out.println("\nAverage Accesses Per Month");
         for(int month = 1;month < 13;month++) {
             System.out.format("%-11s%5s%n",monthNames[month] + ":", monthCounts[month] / yearMonth.length);
         }
