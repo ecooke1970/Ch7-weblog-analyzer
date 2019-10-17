@@ -363,8 +363,10 @@ public class LogAnalyzer
         System.out.println("\nStatus Codes for year: " + codes[0][0]);
         System.out.format("%-11s%-11s%-11s%-11s%n","","200","403","404");
         System.out.format("%-11s%-11s%-11s%-11s%n","Month:","Successful","Not Found","Forbidden");
+        System.out.println("--------------------------------------------");
         for(int month = 1;month < 13;month++) {            
-            System.out.format("%-11s%-11s%-11s%-11s%n",monthNames[month] + ":", codes[month][0], codes[month][1],codes[month][2]);
+            System.out.format("%-11s%-11s%-11s%-11s%n",monthNames[month] + ":",
+            codes[month][0], codes[month][1],codes[month][2]);
         }
     }    
 }
