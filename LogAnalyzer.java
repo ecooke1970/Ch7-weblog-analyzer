@@ -23,6 +23,10 @@ public class LogAnalyzer
     private int[][] yearMonth;
     
     private String[] monthNames;
+    
+    //Where to calculate status codes per month per year
+    //0-200, 1-403, 2-404
+    private int[][] codes = new int[13][3];
 
     /**
      * Create an object to analyze hourly web accesses.
@@ -239,7 +243,7 @@ public class LogAnalyzer
         }
     }
     
-        /**
+    /**
      * Returns the quietest month.  If there is more than one month with same value,
      *  returns first found.
      */
@@ -315,4 +319,50 @@ public class LogAnalyzer
             System.out.format("%-11s%5s%n",monthNames[month] + ":", monthCounts[month] / yearMonth.length);
         }
     }
+    
+    /**
+     * Analyze the status codes from the data of the log file
+     * @param year
+     */
+    public void analyzeStatusCodes(int year)
+    {
+        reader.reset();
+        //Store the year in the array
+        codes[0][0] = year;
+        while(reader.hasNext()) {
+            LogEntry entry = reader.next();
+            int month = entry.getMonth();
+            if(entry.getYear() == year)
+            {
+                int code = entry.getCode();
+                switch(code)
+                {                
+                    case 200: 
+                        codes[month][0]++;
+                        break;                
+                    case 403: 
+                        codes[month][1]++;
+                        break;
+                    case 404: 
+                        codes[month][2]++;
+                        break;
+                }
+            }
+            
+        }
+    }
+    
+    /**
+     * Prints out status codes by month.
+     * Requires that analyzeStatusCodes has been run.
+     */
+    public void printStatusCodes()
+    {
+        System.out.println("\nStatus Codes for year: " + codes[0][0]);
+        System.out.format("%-11s%-11s%-11s%-11s%n","","200","403","404");
+        System.out.format("%-11s%-11s%-11s%-11s%n","Month:","Successful","Not Found","Forbidden");
+        for(int month = 1;month < 13;month++) {            
+            System.out.format("%-11s%-11s%-11s%-11s%n",monthNames[month] + ":", codes[month][0], codes[month][1],codes[month][2]);
+        }
+    }    
 }

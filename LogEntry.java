@@ -117,7 +117,7 @@ public class LogEntry implements Comparable<LogEntry>
      * Return the status code.
      * @return the HTTP response code
      */
-    public int getStatusCode()
+    public int getCode()
     {
         return dataValues[CODE];
     }

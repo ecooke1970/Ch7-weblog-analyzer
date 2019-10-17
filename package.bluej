@@ -1,12 +1,12 @@
 #BlueJ package file
-dependency1.from=LogfileCreator
+dependency1.from=LogfileReader
 dependency1.to=LogEntry
 dependency1.type=UsesDependency
 dependency2.from=LogfileReader
-dependency2.to=LogEntry
+dependency2.to=LogfileCreator
 dependency2.type=UsesDependency
-dependency3.from=LogfileReader
-dependency3.to=LogfileCreator
+dependency3.from=LogfileCreator
+dependency3.to=LogEntry
 dependency3.type=UsesDependency
 dependency4.from=LogEntry
 dependency4.to=LoglineTokenizer
@@ -18,8 +18,8 @@ dependency6.from=LogAnalyzer
 dependency6.to=LogEntry
 dependency6.type=UsesDependency
 editor.fx.0.height=890
-editor.fx.0.width=1130
-editor.fx.0.x=787
+editor.fx.0.width=1448
+editor.fx.0.x=469
 editor.fx.0.y=104
 objectbench.height=85
 objectbench.width=451
