@@ -20,7 +20,9 @@ public class LogAnalyzer
     //Where to calculate the monthly access counts.
     private int[] monthCounts;
     //Where to calculate monthly access by year.
-    private HashMap<Integer, int[]> yearMonth;
+    private int[][] yearMonth;
+    
+    private String[] monthNames;
 
     /**
      * Create an object to analyze hourly web accesses.
@@ -38,18 +40,21 @@ public class LogAnalyzer
         // Create the reader to obtain the data.
         reader = new LogfileReader(filename);
         
-        yearMonth = new HashMap<Integer,int[]>();
+        yearMonth = new int[5][13];
+        monthNames = new String[]{"","January","February","March","April","May","June","July","August",
+                                  "September","October", "November","December"};
     }
 
     /**
      * Run all of the analyze methods.
-     * analyzeHourlyData, analyzeDailyData, analyzeMonthyData
+     * analyzeHourlyData, analyzeDailyData, analyzeMonthyData, analyzeYearMonth
      */
     public void analyzeAll()
     {
         analyzeHourlyData();
         analyzeDailyData();
         analyzeMonthlyData();
+        analyzeYearMonth();
     }
     
     /**
@@ -224,6 +229,7 @@ public class LogAnalyzer
     
     /**
      * Print monthly counts
+     * Requires analyzeMonthlyData to be run first.
      */
     public void printMonthlyCounts()
     {
@@ -253,6 +259,7 @@ public class LogAnalyzer
     /**
      * Returns the busiest month. If there is more than one month with same value,
      * returns first found.
+     * 
      */
     public int busiestMonth()
     {
@@ -272,13 +279,40 @@ public class LogAnalyzer
      */
     public void analyzeYearMonth()
     {
-        reader.reset();
-        int[] workingMonth = new int[13];
+        reader.reset();        
         while(reader.hasNext()) {
             LogEntry entry = reader.next();
-            Integer year = entry.getYear();
+            int year = entry.getYear();
             int month = entry.getMonth();
-            yearMonth.put(year,workingMonth[month]++);
+            yearMonth[year - 2015][month]++;
+        }
+    }
+    
+    /**
+     * Prints out monthly access by year.
+     * Requires analyzeYearMonth to be run first.
+     */
+    public void printYearMonthly()
+    {
+        System.out.println("Monthy access by year");
+        for(int year = 0;year < yearMonth.length;year++) {
+            System.out.println("");
+            System.out.println(year + 2015);
+            for(int month = 1;month < 13;month++) {
+                System.out.format("%-11s%5s%n",monthNames[month] + ": ", yearMonth[year][month]);
+            }
+        }
+    }
+    
+    /**
+     * Prints out average accesses per month.  
+     * Requires analyzeMonthlyData to be run first.
+     */
+    public void averageAccessesPerMonth()
+    {
+        System.out.println("\nAverage Accessess Per Month");
+        for(int month = 1;month < 13;month++) {
+            System.out.format("%-11s%5s%n",monthNames[month] + ":", monthCounts[month] / yearMonth.length);
         }
     }
 }
