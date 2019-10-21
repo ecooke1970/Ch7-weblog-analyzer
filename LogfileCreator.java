@@ -6,6 +6,8 @@ import java.util.*;
  * 
  * @author Erik Cooke
  * @version 2019.10.16
+ * Updated creatEntry-multiple years, calculate days based on month
+ *                    added status codes.
  * 
  * @author David J. Barnes and Michael Kölling
  * @version    2016.02.29
@@ -78,12 +80,15 @@ public class LogfileCreator
         int minute = rand.nextInt(60);
         int statusCode = 0;
         int percent = rand.nextInt(101);
+        //95% of codes should be 200
         if(percent < 95) {
             statusCode = 200;
         }
+        //3% of codes should be 403
         else if(percent > 97) {
             statusCode = 403;
         }
+        //2% of codes should be 404
         else {
             statusCode = 404;
         }

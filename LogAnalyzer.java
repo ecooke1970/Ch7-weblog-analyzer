@@ -25,7 +25,7 @@ public class LogAnalyzer
     private final String[] monthNames;
     
     //Where to calculate status codes per month per year
-    //0:200, 1:403, 2:404
+    //[][0]:200,[][1]:403, [][2]:404
     private int[][] codes = new int[13][3];
 
     /**
@@ -34,7 +34,6 @@ public class LogAnalyzer
      */
     public LogAnalyzer(String filename)
     { 
-        // Create the array object to hold the hourly
         // hourly access counts.
         hourCounts = new int[24];
         //daily access counts
@@ -43,16 +42,16 @@ public class LogAnalyzer
         monthCounts = new int[13];
         // Create the reader to obtain the data.
         reader = new LogfileReader(filename);
-        
+        //Monthly access counts by year
         yearMonth = new int[5][13];
-        monthNames = new String[]{"","January","February","March","April","May","June","July","August",
-                                  "September","October", "November","December"};
+        monthNames = new String[]{"","January","February","March","April","May","June",
+                                  "July","August","September","October", "November","December"};
     }
 
     /**
      * Run all of the analyze methods.
-     * analyzeHourlyData, analyzeDailyData, analyzeMonthyData, analyzeYearMonth
-     * @param year the year to use for analyzeStatusCodes
+     * analyzeHourlyData, analyzeDailyData, analyzeMonthyData, analyzeYearMonth, analyzeStatusCodes.
+     * @param year The year to use for analyzeStatusCodes
      */
     public void analyzeAll(int year)
     {
@@ -85,7 +84,7 @@ public class LogAnalyzer
     {
         System.out.println("\nHr: Count");
         for(int hour = 0; hour < hourCounts.length; hour++) {
-            System.out.println(hour + ": " + hourCounts[hour]);
+            System.out.printf("%3s%6s%n",hour + ":",hourCounts[hour]);
         }
     }
     
@@ -113,6 +112,7 @@ public class LogAnalyzer
     /**
      * Returns the most active hour from the data.     
      * If there is more than one hour with the same amount it will return the first found
+     * These should have been set with a prior call to analyzeHourlyData.
      */
     public int busiestHour() {
         int biggest = 0;
@@ -129,6 +129,7 @@ public class LogAnalyzer
     /**
      * Return the least active hour from the data.
      * Will return the first found if multiple hours are the lowest
+     * These should have been set with a prior call to analyzeHourlyData.
      */
     public int quietestHour() {
         int leastVisits = hourCounts[0];
@@ -143,7 +144,8 @@ public class LogAnalyzer
     }
     
     /**
-     * Returns the busiest 2 hour period from the data
+     * Returns the busiest 2 hour period from the data.
+     * These should have been set with a prior call to analyzeHourlyData.
      */
     public int busiestTwoHour() {
         int busiest = 0;
@@ -178,17 +180,19 @@ public class LogAnalyzer
     
     /**
      * Print daily counts
+     * These should have been set with a prior call to analyzeDailyData.
      */
     public void printDailyCounts()
     {
         System.out.println("\nDay: Count");
         for(int day = 1;day < dayCounts.length;day++) {
-            System.out.println(day + ": " + dayCounts[day]);
+            System.out.printf("%4s%5s%n",day + ":",dayCounts[day]);
         }
     }
     /**
-     * Returns the quietest day.  If there are more than one day with same value,
-     *  returns first found.
+     * Returns the quietest day.
+     * If there are more than one day with same value, returns first found.
+     * These should have been set with a prior call to analyzeDailyData.
      */
     public int quietestDay()
     {
@@ -204,8 +208,9 @@ public class LogAnalyzer
     }
     
     /**
-     * Returns the busiest day. If there are more than one day with same value,
-     * returns first found.
+     * Returns the busiest day.
+     * If there are more than one day with same value, returns first found.
+     * These should have been set with a prior call to analyzeDailyData.
      */
     public int busiestDay()
     {
@@ -234,20 +239,23 @@ public class LogAnalyzer
     }
     
     /**
-     * Print monthly counts
-     * Requires analyzeMonthlyData to be run first.
+     * Print monthly counts.
+     * These should have been set with a prior call to analyzeMonthlyData.
      */
     public void printMonthlyCounts()
     {
-        System.out.println("\nMonth: Count");
+        System.out.println("\n");
+        System.out.printf("%11s%6s%n","Month:","Count");
+        System.out.println("-----------------");
         for(int month = 1;month < monthCounts.length;month++) {
-            System.out.println(month + ":     " + monthCounts[month]);
+            System.out.printf("%11s%5s%n",monthNames[month] + ":", monthCounts[month]);
         }
     }
     
     /**
-     * Returns the quietest month.  If there is more than one month with same value,
-     *  returns first found.
+     * Returns the quietest month.
+     * If there is more than one month with same value, returns first found.
+     * These should have been set with a prior call to analyzeMonthlyData.
      */
     public int quietestMonth()
     {
@@ -263,9 +271,9 @@ public class LogAnalyzer
     }
     
     /**
-     * Returns the busiest month. If there is more than one month with same value,
-     * returns first found.
-     * 
+     * Returns the busiest month.
+     * If there is more than one month with same value, returns first found.
+     * These should have been set with a prior call to analyzeMonthlyData.
      */
     public int busiestMonth()
     {
@@ -281,7 +289,7 @@ public class LogAnalyzer
     }
     
     /**
-     * 
+     * Analyze the monthly data by year from the log file.
      */
     public void analyzeYearMonth()
     {
@@ -296,23 +304,23 @@ public class LogAnalyzer
     
     /**
      * Prints out monthly access by year.
-     * Requires analyzeYearMonth to be run first.
+     * These should have been set with a prior call to analyzeYearMonth.
      */
-    public void printYearMonthly()
+    public void printYearMonth()
     {
         System.out.println("Monthy access by year");
         for(int year = 0;year < yearMonth.length;year++) {
             System.out.println("");
             System.out.println(year + 2015);
             for(int month = 1;month < 13;month++) {
-                System.out.format("%-11s%5s%n",monthNames[month] + ": ", yearMonth[year][month]);
+                System.out.format("%11s%5s%n",monthNames[month] + ": ", yearMonth[year][month]);
             }
         }
     }
     
     /**
      * Prints out average accesses per month.  
-     * Requires analyzeMonthlyData to be run first.
+     * These should have been set with a prior call to analyzeMonthlyData and analyzeYearMonth.
      */
     public void averageAccessesPerMonth()
     {
@@ -323,8 +331,8 @@ public class LogAnalyzer
     }
     
     /**
-     * Analyze the status codes from the data of the log file
-     * @param year
+     * Analyze the status codes from the data of the log file.
+     * @param year The year to be analyzed.
      */
     public void analyzeStatusCodes(int year)
     {
@@ -356,17 +364,17 @@ public class LogAnalyzer
     
     /**
      * Prints out status codes by month.
-     * Requires that analyzeStatusCodes has been run.
+     * These should have been set with a prior call to analyzeStatusCodes.
      */
     public void printStatusCodes()
     {
         System.out.println("\nStatus Codes for year: " + codes[0][0]);
-        System.out.format("%-11s%-11s%-11s%-11s%n","","200","403","404");
-        System.out.format("%-11s%-11s%-11s%-11s%n","Month:","Successful","Not Found","Forbidden");
+        System.out.printf("%-11s%-12s%-11s%-11s%n",""," 200","403","404");
+        System.out.printf("%11s%-12s%-11s%-11s%n","Month:"," Successful","Not Found","Forbidden");
         System.out.println("--------------------------------------------");
         for(int month = 1;month < 13;month++) {            
-            System.out.format("%-11s%-11s%-11s%-11s%n",monthNames[month] + ":",
-            codes[month][0], codes[month][1],codes[month][2]);
+            System.out.printf("%11s%10s%10s%10s%n",monthNames[month] + ":",
+            codes[month][0],codes[month][1], codes[month][2]);
         }
     }    
 }
