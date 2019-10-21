@@ -21,11 +21,11 @@ public class LogAnalyzer
     private int[] monthCounts;
     //Where to calculate monthly access by year.
     private int[][] yearMonth;
-    
-    private String[] monthNames;
+    //Holds names of the months.
+    private final String[] monthNames;
     
     //Where to calculate status codes per month per year
-    //0-200, 1-403, 2-404
+    //0:200, 1:403, 2:404
     private int[][] codes = new int[13][3];
 
     /**
@@ -127,7 +127,7 @@ public class LogAnalyzer
     }
     
     /**
-     * Return the least active hour from the data
+     * Return the least active hour from the data.
      * Will return the first found if multiple hours are the lowest
      */
     public int quietestHour() {
