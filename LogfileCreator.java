@@ -56,6 +56,7 @@ public class LogfileCreator
     
     /**
      * Create a single (random) entry for a log file.
+     * Creates random year, month, day, and status code.
      * @return A log entry containing random data.
      */
     public LogEntry createEntry()
